@@ -53,6 +53,36 @@ on first launch and persisted in the user's app-state data. Shell updates replac
 application files, not the user-data app-state file, so subsequent generic updates
 do not need affiliate-specific installers.
 
+## Standard build + GitHub release upload command
+
+Use this wrapper from this `v-claw-release` repository whenever publishing a
+Windows release:
+
+```bat
+build-and-push-release.bat 1.0.0 --latest=false
+build-and-push-release.bat 1.0.1 --latest=true
+```
+
+The wrapper calls `v-claw-app/scripts/build-and-publish-win-release.js`, which:
+
+1. patches `v-claw-app/package.json` and `package-lock.json` to the requested
+   version for the build,
+2. runs `v-claw-app/build-app-win.bat` non-interactively,
+3. stages assets from `v-claw-app/release/auto-update/latest.yml`,
+4. uploads the generic installer using the exact `path`/`url` filename from
+   `latest.yml` (`V-Claw-Setup-<version>.exe`),
+5. renames affiliate installers to the same hyphen format before upload, and
+6. deletes/recreates the GitHub release in `cong91/v-claw-release`.
+
+To validate filenames without uploading:
+
+```bat
+build-and-push-release.bat 1.0.1 --no-build --dry-run
+```
+
+Do not manually upload dot-format assets such as `V-Claw.Setup.1.0.1.exe`; the
+auto-updater metadata points to hyphen-format assets.
+
 ## Windows build flow
 
 Run the Windows build script from `v-claw-app/`:
