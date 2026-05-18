@@ -22,8 +22,21 @@ Required Windows assets:
 - the generic `V-Claw Setup <version>.exe`
 - `*.blockmap` files generated next to the generic installer
 
-These generic artifacts are the files consumed by `electron-updater`. Do not use
-affiliate-suffixed installers as the update feed assets.
+These generic artifacts are the files consumed by `electron-updater`. The generic
+setup executable is built with fallback attribution metadata:
+
+```json
+{
+  "aff_code": "AUTO_APPROVAL",
+  "source": "windows-auto-update-build",
+  "fallbackOnly": true
+}
+```
+
+This means a direct first install from the update-feed executable can still enter
+the app through `AUTO_APPROVAL`, while an existing installation keeps its already
+persisted affiliate code during shell updates. Do not use affiliate-suffixed
+installers as the update feed assets.
 
 ## Affiliate installers
 
